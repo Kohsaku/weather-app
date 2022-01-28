@@ -1,26 +1,82 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { AppBar, Typography, TextField, MenuItem, Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import Result from "./components/Result";
 
-function App() {
+const useStyle = makeStyles(() => ({
+  app: {
+    height: "100vh",
+    textAlign: "center",
+  },
+  header: {
+    height: "20vh",
+    justifyContent: "center",
+  },
+  body: {
+    height: "80vh",
+    paddingTop: "20vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  textField: {
+    width: "50vh",
+  },
+  button: {
+    width: "20vh",
+  },
+}));
+
+const App: React.FC = () => {
+  const classes = useStyle();
+  const [city, setCity] = useState("");
+  const [openResult, setOpenResult] = useState(false);
+
+  const cityNames = ["Tokyo", "London", "Paris", "Rome", "Beijing"];
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(e.target.value);
+    console.log(e.target.value);
+  };
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    openResult ? setOpenResult(false) : setOpenResult(true);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className={classes.app}>
+      <AppBar className={classes.header} position="static">
+        <Typography variant="h6" component="div">
+          Current Weather
+        </Typography>
+      </AppBar>
+      <div className={classes.body}>
+        <TextField
+          className={classes.textField}
+          select
+          helperText="select"
+          variant="standard"
+          onChange={handleChange}
         >
-          Learn React
-        </a>
-      </header>
+          {cityNames.map((cityName) => (
+            <MenuItem key={cityName} value={cityName}>
+              {cityName}
+            </MenuItem>
+          ))}
+        </TextField>
+        <Button
+          className={classes.button}
+          onClick={handleClick}
+          variant="contained"
+        >
+          {openResult ? "Close" : "Show"}
+        </Button>
+        {openResult && <Result />}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
