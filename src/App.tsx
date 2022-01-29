@@ -31,17 +31,25 @@ const App: React.FC = () => {
   const classes = useStyle();
   const [city, setCity] = useState("");
   const [openResult, setOpenResult] = useState(false);
+  const [currentCondition, setCurrentCondition] = useState("");
+  const [currentIcon, setCurrentIcon] = useState("");
 
   const cityNames = ["Tokyo", "London", "Paris", "Rome", "Beijing"];
+  const apiKey = "API KEY";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCity(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleClick = (
+  const handleClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
+    const ulr = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`;
+    const res = await fetch(ulr);
+    const weather = await res.json();
+    setCurrentCondition(weather.current.condition.text);
+    setCurrentIcon(weather.current.condition.icon);
     openResult ? setOpenResult(false) : setOpenResult(true);
   };
 
@@ -73,7 +81,7 @@ const App: React.FC = () => {
         >
           {openResult ? "Close" : "Show"}
         </Button>
-        {openResult && <Result />}
+        {openResult && <Result text={currentCondition} icon={currentIcon} />}
       </div>
     </div>
   );

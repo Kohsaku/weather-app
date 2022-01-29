@@ -1,7 +1,17 @@
 import React from "react";
 
-const Result: React.FC = () => {
-  return <div>result</div>;
+type Props = {
+  text: string;
+  icon: string;
+};
+
+const Result: React.FC<Props> = (props) => {
+  return (
+    <div>
+      {props.text}
+      {props.icon}
+    </div>
+  );
 };
 
 export default Result;
