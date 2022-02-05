@@ -9,7 +9,7 @@ const useStyle = makeStyles(() => ({
     textAlign: "center",
   },
   header: {
-    height: "20vh",
+    height: "10vh",
     justifyContent: "center",
   },
   body: {
@@ -23,7 +23,7 @@ const useStyle = makeStyles(() => ({
     width: "50vh",
   },
   button: {
-    width: "20vh",
+    width: "30vh",
   },
 }));
 
@@ -33,9 +33,10 @@ const App: React.FC = () => {
   const [openResult, setOpenResult] = useState(false);
   const [currentCondition, setCurrentCondition] = useState("");
   const [currentIcon, setCurrentIcon] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
 
   const cityNames = ["Tokyo", "London", "Paris", "Rome", "Beijing"];
-  const apiKey = "API KEY";
+  const apiKey = "";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCity(e.target.value);
@@ -50,13 +51,14 @@ const App: React.FC = () => {
     const weather = await res.json();
     setCurrentCondition(weather.current.condition.text);
     setCurrentIcon(weather.current.condition.icon);
+    setCurrentDate(weather.current.last_updated);
     openResult ? setOpenResult(false) : setOpenResult(true);
   };
 
   return (
     <div className={classes.app}>
       <AppBar className={classes.header} position="static">
-        <Typography variant="h6" component="div">
+        <Typography variant="h4" component="div">
           Current Weather
         </Typography>
       </AppBar>
@@ -70,7 +72,7 @@ const App: React.FC = () => {
         >
           {cityNames.map((cityName) => (
             <MenuItem key={cityName} value={cityName}>
-              {cityName}
+              <Typography variant="h5">{cityName}</Typography>
             </MenuItem>
           ))}
         </TextField>
@@ -79,9 +81,15 @@ const App: React.FC = () => {
           onClick={handleClick}
           variant="contained"
         >
-          {openResult ? "Close" : "Show"}
+          <Typography variant="h6">{openResult ? "Close" : "Show"}</Typography>
         </Button>
-        {openResult && <Result text={currentCondition} icon={currentIcon} />}
+        {openResult && (
+          <Result
+            text={currentCondition}
+            icon={currentIcon}
+            date={currentDate}
+          />
+        )}
       </div>
     </div>
   );
